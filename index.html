@@ -11,6 +11,7 @@
             background-color: #f4f4f4;
             text-align: center;
             padding: 20px;
+            height: 1vh;
         }
         .stats {
             display: flex;
@@ -38,87 +39,147 @@
         .chart-container {
             width: 100%;
             height: 500px;
+            margin: 20px auto;
+        }
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .price-up {
+            color: green;
+        }
+        .price-down {
+            color: red;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .chart-title {
+            font-size: 24px;
+            font-weight: bold;
+            flex: 1;
+            text-align: left;
+        }
+        .live-price {
+            font-size: 30px;
+            font-weight: bold;
+            flex: 1;
+            text-align: justify;
+        }
+        .chart-selector {
+            display: flex;
+            gap: 10px;
+        }
+        .chart-selector button {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #118B50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .chart-selector button:hover {
+            background-color: #5DB996;
         }
     </style>
 </head>
 <body>
 
-    <!-- ETH Stats (Now on Top) -->
-    <h2>Ethereum Growth Percentages</h2>
-    <div class="stats">
-        <div class="stat-box" onclick="loadChart('24H')"><h3>24H Change</h3><p id="change_24h">Loading...</p></div>
-        <div class="stat-box" onclick="loadChart('7D')"><h3>7D Change</h3><p id="change_7d">Loading...</p></div>
-        <div class="stat-box" onclick="loadChart('30D')"><h3>30D Change</h3><p id="change_30d">Loading...</p></div>
-        <div class="stat-box" onclick="loadChart('1Y')"><h3>1Y Change</h3><p id="change_1y">Loading...</p></div>
-        <div class="stat-box" onclick="loadChart('ALL')"><h3>All Time Change</h3><p id="change_all">Loading...</p></div>
+    <!-- Chart Header -->
+    <div class="chart-header">
+        <div class="chart-title" id="chart-title">Ethereum (ETH)</div>
+        <div class="live-price" id="live-price">$0.00</div>
+        <div class="chart-selector">
+            <button onclick="loadChart('1')">24H</button>
+            <button onclick="loadChart('7')">7D</button>
+            <button onclick="loadChart('30')">30D</button>
+            <button onclick="loadChart('365')">1Y</button>
+            <button onclick="loadChart('ALL')">All Time</button>
+        </div>
     </div>
 
-    <!-- TradingView Chart (Updates Dynamically) -->
-    <h1 id="chart-title">Ethereum (ETH) - Live Trading Chart</h1>
+    <!-- TradingView Widget -->
     <div class="chart-container">
-        <iframe id="tradingview-frame" src="https://www.tradingview.com/chart/?symbol=BINANCE:ETHUSDT" width="100%" height="500px"></iframe>
+        <div id="tradingview-widget"></div>
     </div>
 
     <script>
-        const API_KEY = 'd13dfd2e-956f-4378-a40a-869530075659'; // Your CoinMarketCap API Key
+        let lastPrice = 0;
 
-        // Function to Fetch ETH Data from CoinMarketCap
-        async function fetchETHData() {
+        // Fetch ETH price from Binance API
+        async function fetchETHPrice() {
             try {
-                const response = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=ETH&convert=USD`, {
-                    headers: { 'X-CMC_PRO_API_KEY': API_KEY }
-                });
-
+                const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT');
                 const data = await response.json();
-                const quote = data.data.ETH.quote.USD;
+                const price = parseFloat(data.price);
+                const priceElement = document.getElementById('live-price');
+                
+                // Check if the price is up or down
+                let priceColorClass = '';
+                if (lastPrice === 0) {
+                    lastPrice = price;
+                    priceColorClass = 'price-up'; // Initial color
+                } else if (price > lastPrice) {
+                    priceColorClass = 'price-up'; // Price is up
+                } else if (price < lastPrice) {
+                    priceColorClass = 'price-down'; // Price is down
+                }
 
-                document.getElementById("change_24h").innerText = `${quote.percent_change_24h.toFixed(2)}%`;
-                document.getElementById("change_7d").innerText = `${quote.percent_change_7d.toFixed(2)}%`;
-                document.getElementById("change_30d").innerText = `${quote.percent_change_30d.toFixed(2)}%`;
-                document.getElementById("change_1y").innerText = `${quote.percent_change_1y.toFixed(2)}%`;
-                document.getElementById("change_all").innerText = "N/A"; // All-time % change not available from API
+                // Update the price and color
+                priceElement.innerHTML = `$${price.toFixed(2)}`;
+                priceElement.className = `live-price ${priceColorClass}`;
 
+                lastPrice = price; // Store the last price for comparison
             } catch (error) {
-                console.error("Error fetching ETH data:", error);
+                console.error('Error fetching ETH price:', error);
             }
         }
 
-        fetchETHData();
-        setInterval(fetchETHData, 60000); // Refresh every minute
+        // Load TradingView Widget
+        function loadTradingViewWidget(timeframe = "D") {
+            document.getElementById("tradingview-widget").innerHTML = ""; // Clear previous chart
 
-        // Function to Load Different Chart Views
-        function loadChart(timeframe) {
-            let symbol = "BINANCE:ETHUSDT";
-            let chartURL = "https://www.tradingview.com/chart/?symbol=" + symbol;
-            let title = "Ethereum (ETH) - Live Trading Chart";
-
-            switch(timeframe) {
-                case '24H':
-                    chartURL = `https://www.tradingview.com/chart/?symbol=${symbol}&interval=15`;
-                    title = "Ethereum (ETH) - 24H Chart";
-                    break;
-                case '7D':
-                    chartURL = `https://www.tradingview.com/chart/?symbol=${symbol}&interval=60`;
-                    title = "Ethereum (ETH) - 7D Chart";
-                    break;
-                case '30D':
-                    chartURL = `https://www.tradingview.com/chart/?symbol=${symbol}&interval=D`;
-                    title = "Ethereum (ETH) - 30D Chart";
-                    break;
-                case '1Y':
-                    chartURL = `https://www.tradingview.com/chart/?symbol=${symbol}&interval=W`;
-                    title = "Ethereum (ETH) - 1Y Chart";
-                    break;
-                case 'ALL':
-                    chartURL = `https://www.tradingview.com/chart/?symbol=${symbol}&interval=M`;
-                    title = "Ethereum (ETH) - All Time Chart";
-                    break;
-            }
-
-            document.getElementById("tradingview-frame").src = chartURL;
-            document.getElementById("chart-title").innerText = title;
+            new TradingView.widget({
+                "container_id": "tradingview-widget",
+                "symbol": "BINANCE:ETHUSDT",
+                "interval": timeframe,
+                "theme": "light",
+                "style": "1",
+                "timezone": "Etc/UTC",
+                "allow_symbol_change": false,
+                "width": "100%",
+                "height": "500",
+                "toolbar_bg": "#f4f4f4",
+                "withdateranges": true,
+                "hide_side_toolbar": false
+            });
         }
+
+        // When a user clicks on a timeframe box, load the correct chart
+        function loadChart(days) {
+            let timeframe = "D"; // Default Daily
+            if (days === "1") timeframe = "15";  // 15-minute Chart for 24H
+            if (days === "7") timeframe = "60";  // 1-hour Chart for 7D
+            if (days === "30") timeframe = "D";  // Daily Chart for 30D
+            if (days === "365") timeframe = "W"; // Weekly Chart for 1Y
+            if (days === "ALL") timeframe = "M"; // Monthly Chart for All-Time
+
+            loadTradingViewWidget(timeframe);
+        }
+
+        // Load Default TradingView Chart on Page Load
+        setTimeout(() => loadTradingViewWidget(), 500);
+
+        // Fetch ETH Price every second
+        setInterval(fetchETHPrice, 1000); // Update price every second
     </script>
+
+    <!-- TradingView Script -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
 </body>
 </html>
