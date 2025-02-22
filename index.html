@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#121212"> <!-- Dark theme color -->
+    <meta name="description" content="Live ETH Trading Chart with Real-time Price Updates">
+    <title>Live ETH Trading Chart</title>
+    <link rel="icon" href="icons/icon-512x512.png" type="image/x-icon">
+    <link rel="manifest" href="/manifest.json"> <!-- Link to manifest -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="/styles.css"> <!-- Dark Theme Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <!-- Animation -->
+    <div id="splashScreen">
+        <img src="/icons/icon-512x512.png" alt="App Logo" id="splashLogo">
+        <h1 class="appTitle">ETH Trading Chart</h1>
+    </div>
+    
+    <!-- Main Content (Hidden Initially) -->
+    <div id="mainContent" style="display: none;">
+        <!-- Your existing content here -->
+    </div>
+    
+
+    <!-- Chart Header -->
+    <div class="chart-header">
+        <div class="chart-title" id="chart-title">Ethereum (ETH)</div>
+        <div class="live-price" id="live-price">$0.00</div>
+        <div class="chart-selector">
+            <button onclick="loadChart('1')">24H</button>
+            <button onclick="loadChart('7')">7D</button>
+            <button onclick="loadChart('30')">30D</button>
+            <button onclick="loadChart('365')">1Y</button>
+            <button onclick="loadChart('ALL')">All Time</button>
+        </div>
+    </div>
+
+    <div>
+        <div class="profit-header">
+            <div class="profit-calculator">
+                <button id="profitCalculatorBtn" onclick="openPopup()">
+                    <i class="fa-solid fa-calculator"></i>
+                </button>
+                <div class="profit-text" id="investmentText">Trade: $0</div>
+                <div class="profit-text" id="profitAmount">+0.00 Profit</div>
+                <div class="total-text" id="total">Total: $0.00</div>
+                <span id="editButton" class="edit-icon" style="display: none;" onclick="openPopup()">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </span>
+            </div>
+        </div>
+    
+        <!-- Popup Form -->
+        <div class="popup" id="profitPopup">
+            <span class="close" onclick="closePopup()">×</span>
+            <h3>Enter Your Details</h3>
+            
+            <label>Investment Amount ($):</label>
+            <input type="number" id="investment" value="100">
+    
+            <label>Bought ETH at ($):</label>
+            <input type="number" id="buyPrice" value="3000">
+    
+            <label>Trading Fee ($):</label>
+            <input type="number" id="fee" value="5">
+    
+            <button onclick="submitForm()">Calculate</button>
+        </div>
+    </div>
+
+    <!-- TradingView Widget -->
+    <div class="chart-container">
+        <div id="tradingview-widget"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="calculator.js"></script>
+
+    <!-- TradingView Script -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>

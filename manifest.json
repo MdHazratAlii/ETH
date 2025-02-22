@@ -1,0 +1,22 @@
+{
+  "name": "Live ETH Trading Chart",
+  "short_name": "ETH Chart",
+  "description": "Live ETH Trading Chart with Real-time Price Updates",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#118B50",
+  "icons": [
+      {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+      },
+      {
+          "src": "/icons/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+      }
+  ]
+}

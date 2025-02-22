@@ -1,0 +1,394 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Dark mode background */
+    color: #f4f4f4; /* Light text color for dark mode */
+    text-align: center;
+    padding: 20px;
+    height: 1vh;
+    margin: 0;
+}
+
+/* ====================Animation======================== */
+
+/* Splash Screen Styles */
+#splashScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #121212;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    animation: fadeOut 1.5s ease-in-out 3s forwards;
+}
+
+/* Rounded Logo */
+#splashLogo {
+    width: 120px;
+    height: 120px;
+    border-radius: 20px; /* Rounded corners */
+    animation: logoBounce 1.5s ease-in-out;
+}
+
+/* App Title Styling */
+.appTitle {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out 1s forwards;
+}
+
+/* Keyframe Animations */
+@keyframes logoBounce {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+/* ====================Animation======================== */
+
+
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.stat-box {
+    background: #2a2a2a; /* Darker background for stat boxes */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    min-width: 150px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #ffffff; /* Light text in stat boxes */
+}
+.stat-box:hover {
+    background: #444444;
+}
+.stat-box h3 {
+    margin: 5px 0;
+}
+.chart-container {
+    width: 100%;
+    height: 500px;
+    margin: 20px auto;
+}
+.price {
+    font-size: 24px;
+    font-weight: bold;
+}
+.price-up {
+    color: rgb(22, 238, 22);
+}
+.price-down {
+    color: red;
+}
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #627dea2c; /* Dark header */
+    padding: 9px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+.chart-title {
+    font-size: 24px;
+    font-weight: bold;
+    flex: 1;
+    text-align: left;
+}
+.live-price {
+    font-size: 30px;
+    font-weight: bold;
+    flex: 1;
+    text-align: justify;
+}
+.chart-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Wrap buttons on small screens */
+    justify-content: center;
+    margin-top: 0px;
+}
+.chart-selector button {
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: #627eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.chart-selector button:hover {
+    background-color: #5DB996;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .chart-title {
+        font-size: 20px;
+    }
+    .live-price {
+        font-size: 25px;
+    }
+    .chart-selector button {
+        padding: 10px 13px;
+        font-size: 17px;
+        font-weight: 600;
+    }
+    .chart-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    .chart-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 17px 0px;
+    }
+    .stat-box {
+        min-width: 120px;
+        font-size: 14px;
+    }
+    .chart-title {
+        font-size: 40px;
+    }
+    .live-price {
+        font-size: 50px;
+        padding: 15px;
+    }
+    .chart-container {
+        height: 300px;
+    }
+}
+#seo-article {
+    display: none; /* Hide from normal users */
+}
+
+@media (max-width: 768px) {
+    #seo-article {
+        display: none; /* Hide on mobile devices as well */
+    }
+}
+
+
+
+/* ======================================= */
+
+/* Header Section */
+.profit-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #121212; /* Dark background for the header */
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.chart-header .profit-calculator {
+    display: flex;
+    align-items: center;
+}
+
+.chart-header .profit-calculator button {
+    background-color: #fff;
+    color: #118B50;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.chart-header .profit-calculator .profit-text,
+.chart-header .profit-calculator .total-text {
+    font-size: 16px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+/* Container for popup */
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+button {
+    background: #118B50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #0d7242;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    background: #2a2f41;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: left;
+    z-index: 100;
+}
+
+.popup input {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 95%;
+}
+
+.popup .close {
+    background: red;
+    float: right;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+}
+
+.popup .close:hover {
+    background: darkred;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .chart-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chart-header .profit-calculator {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .chart-header .profit-calculator button,
+    .chart-header .profit-calculator .profit-text,
+    .chart-header .profit-calculator .total-text {
+        width: 100%;
+        text-align: left;
+    }
+
+    .popup {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+/* Larger screen adjustments */
+@media (min-width: 601px) {
+    .chart-header .profit-calculator button {
+        margin-bottom: 0;
+    }
+}
+
+/* Icon for Edit */
+.edit-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #118B50;
+    margin-left: 15px;
+}
+
+.edit-icon:hover {
+    color: #f1f1f1;
+}
+
+/* ======================================== */
+
+/* Profit Section Adjustments */
+.profit-calculator {
+    display: flex;
+    align-items: center;
+}
+
+.profit-text,
+.total-text,
+#profitCalculatorBtn {
+    margin-left: 15px; /* Adds space between the elements */
+}
+
+#profitCalculatorBtn {
+    padding: 0px;
+    background-color: #118B50; /* Dark green background */
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#profitCalculatorBtn:hover {
+    background-color: #5DB996; /* Light green on hover */
+}
+
+.profit-text,
+#profitAmount,
+.total-text {
+    font-size: 20px;
+    color: #fff;
+}
+
+#profitAmount {
+    font-weight: bold;
+}
+
+.profit-header .profit-calculator > div {
+    white-space: nowrap; /* Prevent text from wrapping to next line */
+}
+@media (max-width: 600px) {
+    .popup {
+        width: 80%;
+        padding: 15px;
+    }
+}
